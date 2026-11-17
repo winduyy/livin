@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="shieldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0F4C81" />
+      <stop offset="100%" stop-color="#002D62" />
+    </linearGradient>
+    <linearGradient id="goldTip" x1="0%" y1="70%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF" />
+      <stop offset="100%" stop-color="#FFB703" />
+    </linearGradient>
+  </defs>
+
+  <!-- Background Base -->
+  <rect width="512" height="512" rx="0" fill="#0F4C81" />
+
+  <!-- Shield Outer Glow / Border -->
+  <path d="M 256 80 C 290 92 370 94 396 100 C 400 180 404 290 256 432 C 108 290 112 180 116 100 C 142 94 222 92 256 80 Z" 
+        fill="url(#shieldGrad)" 
+        stroke="url(#goldTip)" 
+        stroke-width="14" 
+        stroke-linejoin="round" />
+
+  <!-- White Smart Arrow -->
+  <!-- Arrow Head -->
+  <path d="M 256 160 L 336 248 L 292 248 L 292 344 L 220 344 L 220 248 L 176 248 Z" 
+        fill="#FFFFFF" />
+
+  <!-- Mandiri Accent Lightning / Dash -->
+  <circle cx="256" cy="382" r="8" fill="#FFB703" />
+</svg>

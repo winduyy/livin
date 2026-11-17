@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Livin' Smart Assist</title>
+  <meta name="theme-color" content="#0F4C81">
+  <link rel="manifest" href="./manifest.json">
+  <!-- iPhone / iOS Safari PWA meta tags -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Smart Assist">
+  <link rel="apple-touch-icon" href="./icons/apple-touch-icon.png">
+  <meta name="format-detection" content="telephone=no">
+  <link rel="stylesheet" href="./css/style.css">
+  <!-- FontAwesome Icons for clean banking iconography -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+<div class="app-container">
+
+  <!-- ====================================================
+       MOBILE SMARTPHONE VIEWPORT MOCKUP (CENTERED ON SCREEN)
+       ==================================================== -->
+  <div class="phone-mockup">
+    <!-- Status Bar (Real-Time Clock | 5G 87%) -->
+    <div class="phone-status-bar">
+      <span id="status-bar-clock">--.--</span>
+      <div class="status-bar-icons">
+        <span>5G</span>
+        <i class="fas fa-signal"></i>
+        <span>87%</span>
+        <i class="fas fa-battery-three-quarters"></i>
+      </div>
+    </div>
+
+    <!-- Scrollable Screen Content Container -->
+    <div class="screen-content" id="screen-scroll-container">
+
+      <!-- ==============================================
+           1. HALAMAN BERANDA (Wireframe Gambar 4.11 Kiri)
+           ============================================== -->
+      <section id="view-beranda" class="page-view active">
+        <!-- Header Livin' Smart Assist: Judul + Sapaan Saldo -->
+        <div class="livin-header">
+          <div class="home-brand-title">Livin' Smart Assist</div>
+          <div class="home-greeting" id="home-greeting-text">
+            Halo, Nasabah Simulasi &middot; Saldo <strong>Rp 2.450.000</strong>
+          </div>
+        </div>
+
+        <!-- Kolom Pencarian Fitur -->
+        <div class="search-bar-widget">
+          <div class="search-input-box" onclick="App.navigateTo('pencarian-fitur')">
+            <i class="fas fa-search" style="color: #64748b;"></i>
+            <input type="text" placeholder="Cari fitur (mis. 'listrik', 'top up')" readonly>
+          </div>
+        </div>
+
+        <!-- Deretan Penerima Favorit (Ibu Kos, Cicilan, Adik, + Tambah) -->
+        <div class="section-wrap">
+          <div class="section-head">
+            <span class="section-title">Penerima Favorit</span>
+          </div>
+          <div class="favorites-row" id="home-favorites-row">
+            <!-- Dynamic favorites rendered by js/app.js -->
+          </div>
+        </div>
+
+        <!-- Menu Utama (8 Ikon: Transfer, Top Up, Bayar, Otomatis, Pantau, Keamanan, QRIS, Mode) -->
+        <div class="section-wrap">
+          <div class="section-head">
+            <span class="section-title">Menu Utama</span>
+          </div>
+          <div class="menu-grid-8">
+            <button class="menu-item-btn" onclick="App.navigateTo('buat-jadwal')">
+              <div class="menu-icon-box"><i class="fas fa-exchange-alt"></i></div>
+              <span class="menu-title-text">Transfer</span>
+            </button>
+            <button class="menu-item-btn" onclick="App.navigateTo('buat-jadwal')">
+              <div class="menu-icon-box gold"><i class="fas fa-mobile-alt"></i></div>
+              <span class="menu-title-text">Top Up</span>
+            </button>
+            <button class="menu-item-btn" onclick="App.navigateTo('buat-jadwal')">
+              <div class="menu-icon-box green"><i class="fas fa-receipt"></i></div>
+              <span class="menu-title-text">Bayar</span>
+            </button>
+            <button class="menu-item-btn" onclick="App.navigateTo('transaksi-otomatis')">
+              <div class="menu-icon-box purple"><i class="fas fa-sync-alt"></i></div>
+              <span class="menu-title-text">Otomatis</span>
+            </button>
+            <button class="menu-item-btn" onclick="App.navigateTo('pantau-transaksi')">
+              <div class="menu-icon-box"><i class="fas fa-clipboard-list"></i></div>
+              <span class="menu-title-text">Pantau</span>
+            </button>
+            <button class="menu-item-btn" onclick="App.navigateTo('pusat-keamanan')">
+              <div class="menu-icon-box gold"><i class="fas fa-shield-alt"></i></div>
+              <span class="menu-title-text">Keamanan</span>
+            </button>
+            <button class="menu-item-btn" onclick="alert('Simulasi QRIS: Kamera pemindai siap digunakan.')">
+              <div class="menu-icon-box green"><i class="fas fa-qrcode"></i></div>
+              <span class="menu-title-text">QRIS</span>
+            </button>
+            <button class="menu-item-btn" onclick="App.toggleSimpleMode(true)">
+              <div class="menu-icon-box purple"><i class="fas fa-th-large"></i></div>
+              <span class="menu-title-text">Mode</span>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==============================================
+           2. HALAMAN MODE SEDERHANA (Gambar 5.1 Kanan)
+           ============================================== -->
+      <section id="view-mode-sederhana" class="page-view">
+        <div class="sederhana-wrap">
+          <div class="sederhana-header-card">
+            <h1>Mode Sederhana</h1>
+            <p>Tampilan besar dengan menu inti untuk kemudahan akses nasabah.</p>
+          </div>
+
+          <!-- 4 Menu Inti Berukuran Besar -->
+          <div class="sederhana-grid-4">
+            <button class="sederhana-btn" onclick="App.navigateTo('buat-jadwal')">
+              <div class="sederhana-icon transfer"><i class="fas fa-exchange-alt"></i></div>
+              <span class="sederhana-label">Transfer</span>
+            </button>
+            <button class="sederhana-btn" onclick="App.navigateTo('buat-jadwal')">
+              <div class="sederhana-icon topup"><i class="fas fa-wallet"></i></div>
+              <span class="sederhana-label">Top Up</span>
+            </button>
+            <button class="sederhana-btn" onclick="App.navigateTo('buat-jadwal')">
+              <div class="sederhana-icon bayar"><i class="fas fa-receipt"></i></div>
+              <span class="sederhana-label">Bayar</span>
+            </button>
+            <button class="sederhana-btn" onclick="App.navigateTo('pantau-transaksi')">
+              <div class="sederhana-icon pantau"><i class="fas fa-clipboard-list"></i></div>
+              <span class="sederhana-label">Pantau</span>
+            </button>
+          </div>
+
+          <!-- Sakelar Kembali ke Mode Normal -->
+          <div class="mode-switch-card">
+            <div class="mode-switch-info">
+              <h4>Mode Sederhana</h4>
+              <p>Tampilkan 4 menu inti saja</p>
+            </div>
+            <label class="switch">
+              <input type="checkbox" id="mode-sederhana-switch" checked onchange="App.toggleSimpleMode(this.checked)">
+              <span class="slider"></span>
+            </label>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==============================================
+           3. HALAMAN PENCARIAN FITUR (Gambar 5.2 Kiri)
+           ============================================== -->
+      <section id="view-pencarian-fitur" class="page-view">
+        <div class="livin-header-sub">
+          <button class="header-back-btn" onclick="App.navigateTo('beranda')"><i class="fas fa-arrow-left"></i></button>
+          <div class="header-title-wrap">
+            <h2>Pencarian Fitur</h2>
+            <p>Cari fitur cepat berdasarkan kata kunci</p>
+          </div>
+        </div>
+
+        <div style="padding: 16px 18px 8px 18px;">
+          <div class="search-input-box">
+            <i class="fas fa-search" style="color: #64748b;"></i>
+            <input type="text" id="feature-search-input" placeholder="Ketik kata kunci (mis. 'listrik', 'gopay')..." oninput="App.executeFeatureSearch(this.value)">
+          </div>
+          <div id="feature-search-msg" style="font-size: 12px; color: var(--text-muted); margin: 8px 6px 0 6px;">
+            Masukkan kata kunci pencarian
+          </div>
+        </div>
+
+        <div style="padding: 10px 18px;" id="feature-search-results">
+          <!-- Populated dynamically -->
+        </div>
+      </section>
+
+      <!-- ==============================================
+           4. HALAMAN PENERIMA FAVORIT (Gambar 5.2 Kanan)
+           ============================================== -->
+      <section id="view-penerima-favorit" class="page-view">
+        <div class="livin-header-sub">
+          <button class="header-back-btn" onclick="App.navigateTo('beranda')"><i class="fas fa-arrow-left"></i></button>
+          <div class="header-title-wrap">
+            <h2>Penerima Favorit</h2>
+            <p>Transfer lebih cepat tanpa input ulang</p>
+          </div>
+        </div>
+
+        <div style="padding: 14px 18px 6px 18px;">
+          <button class="btn btn-primary btn-block" onclick="App.openModal('modal-tambah-favorit')">
+            <i class="fas fa-user-plus"></i> + Tambah Penerima Favorit
+          </button>
+        </div>
+
+        <div style="padding: 10px 18px;" id="favorit-list-container">
+          <!-- Populated dynamically -->
+        </div>
+      </section>
+
+      <!-- ==============================================
+           5. HALAMAN TRANSAKSI OTOMATIS (Gambar 4.11 & 5.3 Kiri)
+           ============================================== -->
+      <section id="view-transaksi-otomatis" class="page-view">
+        <div class="livin-header-sub">
+          <button class="header-back-btn" onclick="App.navigateTo('beranda')"><i class="fas fa-arrow-left"></i></button>
+          <div class="header-title-wrap">
+            <h2>Transaksi Otomatis</h2>
+            <p>Atur transaksi rutin sekali, jalan sendiri</p>
+          </div>
+        </div>
+
+        <!-- Tab Status Jadwal (Aktif, Dijeda, Riwayat) -->
+        <div class="tabs-nav">
+          <button class="tab-btn jadwal-tab-btn active" data-tab="Aktif" onclick="App.setScheduleTab('Aktif')">
+            Aktif (<span id="tab-count-aktif">3</span>)
+          </button>
+          <button class="tab-btn jadwal-tab-btn" data-tab="Dijeda" onclick="App.setScheduleTab('Dijeda')">
+            Dijeda (<span id="tab-count-dijeda">0</span>)
+          </button>
+          <button class="tab-btn jadwal-tab-btn" data-tab="Riwayat" onclick="App.navigateTo('pantau-transaksi')">
+            Riwayat
+          </button>
+        </div>
+
+        <div class="fab-container">
+          <button class="btn btn-primary btn-block" onclick="App.navigateTo('buat-jadwal')">
+            <i class="fas fa-plus"></i> + Buat Jadwal Baru
+          </button>
+        </div>
+
+        <div style="padding: 0 18px 20px 18px;" id="jadwal-list-container">
+          <!-- Populated dynamically -->
+        </div>
+      </section>
+
+      <!-- ==============================================
+           6. HALAMAN BUAT JADWAL (Gambar 5.3 Kanan)
+           ============================================== -->
+      <section id="view-buat-jadwal" class="page-view">
+        <div class="livin-header-sub">
+          <button class="header-back-btn" onclick="App.navigateTo('transaksi-otomatis')"><i class="fas fa-arrow-left"></i></button>
+          <div class="header-title-wrap">
+            <h2>Buat Jadwal Transaksi</h2>
+            <p>Atur jadwal transaksi dan perlindungan saldo</p>
+          </div>
+        </div>
+
+        <div style="padding: 16px 18px 30px 18px;">
+          <!-- Quick favorite picker -->
+          <div class="form-group">
+            <label class="form-label">Pilih dari Favorit (Opsional)</label>
+            <select class="form-select" id="jadwal-fav-picker" onchange="App.onFavPickerChange(this.value)">
+              <!-- Options populated by JS -->
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Jenis Transaksi</label>
+            <select class="form-select" id="jadwal-input-jenis">
+              <option value="Transfer">Transfer</option>
+              <option value="Top up">Top up</option>
+              <option value="Tagihan">Tagihan</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Penerima atau Tujuan</label>
+            <input type="text" class="form-input" id="jadwal-input-tujuan" placeholder="Nama penerima / no. rekening / ID pelanggan">
+            <div class="form-helper">Wajib diisi sesuai tujuan pembayaran.</div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Nominal (Rp)</label>
+            <input type="number" inputmode="numeric" class="form-input" id="jadwal-input-nominal" placeholder="Contoh: 900000" min="1">
+            <div class="form-helper">Nominal harus berupa angka lebih dari 0.</div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Frekuensi</label>
+            <select class="form-select" id="jadwal-input-frekuensi">
+              <option value="Bulanan">Bulanan</option>
+              <option value="Mingguan">Mingguan</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Tanggal Mulai / Jatuh Tempo</label>
+            <input type="date" class="form-input" id="jadwal-input-tanggal">
+            <div class="form-helper">Tanggal mulai tidak boleh di masa lalu.</div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Saldo Minimum yang Dilindungi (Rp)</label>
+            <input type="number" inputmode="numeric" class="form-input" id="jadwal-input-saldomin" value="100000" min="0" step="10000">
+            <div class="form-helper">Batas saldo aman (parameter: Rp 50.000 – Rp 200.000).</div>
+          </div>
+
+          <!-- Alert Note matching Figure 5.3 -->
+          <div class="info-box warning">
+            <i class="fas fa-shield-alt"></i>
+            <div>Transaksi ditunda otomatis bila saldo setelah transaksi di bawah saldo minimum.</div>
+          </div>
+
+          <div style="display:flex; flex-direction:column; gap:10px; margin-top:20px;">
+            <button class="btn btn-primary btn-block" onclick="App.saveScheduleForm()">
+              <i class="fas fa-check"></i> Simpan Jadwal
+            </button>
+            <button class="btn btn-secondary btn-block" onclick="App.navigateTo('transaksi-otomatis')">
+              Batal
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==============================================
+           7. HALAMAN PANTAU TRANSAKSI (Gambar 4.12 & 5.5 Kiri)
+           ============================================== -->
+      <section id="view-pantau-transaksi" class="page-view">
+        <div class="livin-header-sub">
+          <button class="header-back-btn" onclick="App.navigateTo('beranda')"><i class="fas fa-arrow-left"></i></button>
+          <div class="header-title-wrap">
+            <h2>Pantau Transaksi</h2>
+            <p>Status transaksi & antrean pemrosesan ulang</p>
+          </div>
+        </div>
+
+        <!-- Tab Status (Semua, Berhasil, Tertunda, Gagal) -->
+        <div class="tabs-nav">
+          <button class="tab-btn trx-filter-btn active" data-filter="Semua" onclick="App.setTrxFilter('Semua')">
+            <span id="tab-trx-semua">Semua</span>
+          </button>
+          <button class="tab-btn trx-filter-btn" data-filter="Berhasil" onclick="App.setTrxFilter('Berhasil')">
+            <span id="tab-trx-berhasil">Berhasil</span>
+          </button>
+          <button class="tab-btn trx-filter-btn" data-filter="Tertunda" onclick="App.setTrxFilter('Tertunda')">
+            <span id="tab-trx-tertunda">Tertunda</span>
+          </button>
+          <button class="tab-btn trx-filter-btn" data-filter="Gagal" onclick="App.setTrxFilter('Gagal')">
+            <span id="tab-trx-gagal">Gagal</span>
+          </button>
+        </div>
+
+        <div style="padding: 14px 18px;" id="pantau-trx-list">
+          <!-- Populated dynamically -->
+        </div>
+      </section>
+
+      <!-- ==============================================
+           8. HALAMAN DETAIL TRANSAKSI (Gambar 5.5 Kanan)
+           ============================================== -->
+      <section id="view-detail-transaksi" class="page-view">
+        <div class="livin-header-sub">
+          <button class="header-back-btn" onclick="App.navigateTo('pantau-transaksi')"><i class="fas fa-arrow-left"></i></button>
+          <div class="header-title-wrap">
+            <h2>Detail Transaksi</h2>
+            <p>Informasi status, nominal & rincian antrean</p>
+          </div>
+        </div>
+
+        <div style="padding: 16px 18px;" id="detail-trx-content">
+          <!-- Populated dynamically -->
+        </div>
+      </section>
+
+      <!-- ==============================================
+           9. HALAMAN PUSAT KEAMANAN (Gambar 4.12 & 5.6)
+           ============================================== -->
+      <section id="view-pusat-keamanan" class="page-view">
+        <div class="livin-header-sub">
+          <button class="header-back-btn" onclick="App.navigateTo('beranda')"><i class="fas fa-arrow-left"></i></button>
+          <div class="header-title-wrap">
+            <h2>Pusat Keamanan</h2>
+            <p>Atur perlindungan sesuai profil Anda</p>
+          </div>
+        </div>
+
+        <div style="padding: 16px 18px 24px 18px;">
+
+          <!-- Kunci Aktif Alert Banner (if locked) -->
+          <div id="sec-lock-banner" class="info-box warning" style="display: none;">
+            <i class="fas fa-lock"></i>
+            <div>
+              <strong>Transaksi keluar dikunci.</strong><br>
+              <span id="sec-lock-info-text">Semua transfer dan pembayaran ditolak sampai kunci dibuka.</span>
+            </div>
+          </div>
+
+          <!-- Limit Transaksi Harian Card -->
+          <div class="card">
+            <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+              <div>
+                <div style="font-size:12px; color:var(--text-muted); font-weight:600;">Limit transaksi harian</div>
+                <div style="font-size:20px; font-weight:800; color:var(--text-main); margin-top:3px;" id="sec-limit-harian">Rp 5.000.000</div>
+                <div style="font-size:11px; color:var(--text-secondary); margin-top:3px;" id="sec-used-today">Terpakai hari ini Rp 0</div>
+              </div>
+              <button class="btn btn-secondary btn-sm" onclick="App.openEditLimitModal()">Ubah</button>
+            </div>
+          </div>
+
+          <!-- Ambang Verifikasi Sidik Jari Card -->
+          <div class="card">
+            <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+              <div>
+                <div style="font-size:12px; color:var(--text-muted); font-weight:600;">Ambang verifikasi sidik jari</div>
+                <div style="font-size:20px; font-weight:800; color:var(--text-main); margin-top:3px;" id="sec-ambang-verif">Rp 1.000.000</div>
+                <div style="font-size:11px; color:var(--text-secondary); margin-top:3px;">Di atas nilai ini wajib verifikasi</div>
+              </div>
+              <button class="btn btn-secondary btn-sm" onclick="App.openEditLimitModal()">Ubah</button>
+            </div>
+          </div>
+
+          <!-- Kunci Sementara Transaksi Keluar Card -->
+          <div class="card">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <div>
+                <div style="font-size:13px; font-weight:700; color:var(--text-main);">Kunci sementara transaksi keluar</div>
+                <div style="font-size:11px; color:var(--text-muted); margin-top:2px;">Blokir semua transfer & pembayaran</div>
+              </div>
+              <label class="switch">
+                <input type="checkbox" id="sec-lock-switch" onchange="App.toggleLockSwitch(this.checked)">
+                <span class="slider"></span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Log Peringatan Row Menu -->
+          <div class="card card-clickable" onclick="App.navigateTo('log-peringatan')" style="margin-top: 10px;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <div style="display:flex; align-items:center; gap:10px;">
+                <div style="width:36px; height:36px; border-radius:50%; background:#fee2e2; color:#b91c1c; display:flex; align-items:center; justify-content:center;">
+                  <i class="fas fa-exclamation-triangle"></i>
+                </div>
+                <div>
+                  <div style="font-size:13px; font-weight:700;">Log peringatan</div>
+                  <div style="font-size:11px; color:var(--text-muted);" id="sec-log-count">(3 catatan)</div>
+                </div>
+              </div>
+              <i class="fas fa-chevron-right" style="color:#cbd5e1; font-size:13px;"></i>
+            </div>
+          </div>
+
+          <!-- Bagian Lipat: Pengaturan Simulasi (Demo) -->
+          <details class="demo-accordion" id="demo-settings-accordion">
+            <summary>
+              <span><i class="fas fa-sliders-h" style="margin-right:6px;"></i> Pengaturan Simulasi (Demo)</span>
+              <i class="fas fa-chevron-down summary-arrow"></i>
+            </summary>
+            <div class="demo-content-body">
+              <div class="form-group" style="margin-bottom: 12px;">
+                <label class="form-label" style="font-size:11px;">Kontrol Simulasi Layanan Bank</label>
+                <select class="form-select" id="bank-simulation-select" onchange="App.setBankSimulationMode(this.value)">
+                  <option value="auto">Normal</option>
+                  <option value="gangguan_once">Gangguan 1x lalu pulih</option>
+                  <option value="always_disruption">Gangguan terus-menerus</option>
+                  <option value="always_fail">Transaksi Gagal</option>
+                </select>
+                <div class="form-helper" style="font-size:10px;">Pilih kondisi respon layanan bank simulasi untuk pengujian alur.</div>
+              </div>
+              <button class="btn btn-secondary btn-sm btn-block" onclick="App.resetSimulationData()">
+                <i class="fas fa-undo"></i> Reset Data Simulasi
+              </button>
+
+              <!-- Kontainer Pasang PWA (Android / iPhone) -->
+              <div id="pwa-install-container" style="margin-top: 14px; padding-top: 12px; border-top: 1px dashed #cbd5e1; display: none;">
+                <div style="font-size: 11px; font-weight: 700; color: var(--primary-navy); margin-bottom: 6px; display: flex; align-items: center; gap: 5px;">
+                  <i class="fas fa-mobile-alt" style="color: var(--primary-blue);"></i> Pasang Aplikasi (PWA)
+                </div>
+                <!-- Tombol Android Chrome -->
+                <button id="pwa-install-btn" class="btn btn-primary btn-sm btn-block" style="display: none; margin-bottom: 6px;" onclick="App.installPWA()">
+                  <i class="fas fa-download"></i> Pasang Aplikasi ke Layar Utama
+                </button>
+                <!-- Petunjuk iPhone Safari -->
+                <div id="pwa-ios-tip" style="display: none; background: #e6f0fa; border: 1px solid #bfdbfe; border-radius: var(--radius-sm); padding: 8px 10px; font-size: 11px; color: #1e3a8a; line-height: 1.4;">
+                  <i class="fas fa-info-circle" style="color: var(--primary-blue); margin-right: 4px;"></i>
+                  Ketuk tombol <strong>Bagikan</strong> (<i class="fas fa-share-square"></i>), lalu pilih <strong>'Tambahkan ke Layar Utama'</strong>.
+                </div>
+              </div>
+            </div>
+          </details>
+
+        </div>
+      </section>
+
+      <!-- ==============================================
+           10. HALAMAN LOG PERINGATAN (Gambar 5.7 Kiri)
+           ============================================== -->
+      <section id="view-log-peringatan" class="page-view">
+        <div class="livin-header-sub">
+          <button class="header-back-btn" onclick="App.navigateTo('pusat-keamanan')"><i class="fas fa-arrow-left"></i></button>
+          <div class="header-title-wrap">
+            <h2>Log Peringatan</h2>
+            <p>Daftar kejadian keamanan dan penolakan transaksi</p>
+          </div>
+        </div>
+
+        <div style="padding: 14px 18px;" id="log-list-container">
+          <!-- Populated dynamically -->
+        </div>
+      </section>
+
+    </div><!-- End screen-content -->
+
+    <!-- ==============================================
+         BOTTOM NAVIGATION BAR (4 Menu Inti)
+         Beranda, Otomatis, Pantau, Keamanan
+         ============================================== -->
+    <nav class="bottom-nav">
+      <button class="nav-item-btn active" data-target="beranda" onclick="App.navigateTo('beranda')">
+        <i class="fas fa-home"></i>
+        <span>Beranda</span>
+      </button>
+      <button class="nav-item-btn" data-target="transaksi-otomatis" onclick="App.navigateTo('transaksi-otomatis')">
+        <i class="fas fa-sync-alt"></i>
+        <span>Otomatis</span>
+      </button>
+      <button class="nav-item-btn" data-target="pantau-transaksi" onclick="App.navigateTo('pantau-transaksi')">
+        <i class="fas fa-clipboard-list"></i>
+        <span>Pantau</span>
+      </button>
+      <button class="nav-item-btn" data-target="pusat-keamanan" onclick="App.navigateTo('pusat-keamanan')">
+        <i class="fas fa-shield-alt"></i>
+        <span>Keamanan</span>
+      </button>
+    </nav>
+
+    <!-- ==============================================
+         MODAL 1: VERIFIKASI SIDIK JARI (Gambar 5.7 Kanan)
+         ============================================== -->
+    <div id="modal-fingerprint" class="modal-overlay">
+      <div class="modal-sheet" style="text-align: center;">
+        <div class="modal-drag-bar"></div>
+        <h3 style="font-size: 17px; font-weight: 800; margin-bottom: 4px;">Verifikasi Sidik Jari</h3>
+        <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 16px;">Nominal melebihi ambang batas keamanan</p>
+
+        <div class="fingerprint-icon-box" onclick="App.resolveFingerprint(true)">
+          <i class="fas fa-fingerprint"></i>
+        </div>
+
+        <p style="font-size: 13px; font-weight: 600; color: var(--text-secondary); margin-bottom: 20px;">
+          Sentuh sensor untuk melanjutkan
+        </p>
+
+        <div style="display:flex; flex-direction:column; gap:8px;">
+          <button class="btn btn-primary btn-block" onclick="App.resolveFingerprint(true)">
+            <i class="fas fa-check-circle"></i> Simulasi Verifikasi Sukses
+          </button>
+          <button class="btn btn-danger btn-block" onclick="App.resolveFingerprint(false)">
+            <i class="fas fa-times-circle"></i> Simulasi Verifikasi Gagal
+          </button>
+          <button class="btn btn-secondary btn-block" onclick="App.resolveFingerprint(false)">
+            Batal
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==============================================
+         MODAL 2: PERINGATAN SALDO MINIMUM (Gambar 5.4)
+         ============================================== -->
+    <div id="modal-saldo-minimum" class="modal-overlay">
+      <div class="modal-sheet">
+        <div class="modal-drag-bar"></div>
+        <div class="saldo-min-alert-banner" id="saldo-min-modal-text">
+          Transaksi ditahan. Saldo setelah transaksi berada di bawah saldo minimum yang dilindungi.
+        </div>
+
+        <div style="display:flex; flex-direction:column; gap:10px; margin-top:16px;">
+          <button class="btn btn-primary btn-block" onclick="App.closeModal('modal-saldo-minimum'); App.navigateTo('buat-jadwal');">
+            Ubah Saldo Minimum
+          </button>
+          <button class="btn btn-secondary btn-block" onclick="App.closeModal('modal-saldo-minimum')">
+            Lewati Periode Ini
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==============================================
+         MODAL 3: TAMBAH PENERIMA FAVORIT
+         ============================================== -->
+    <div id="modal-tambah-favorit" class="modal-overlay">
+      <div class="modal-sheet">
+        <div class="modal-drag-bar"></div>
+        <h3 style="font-size: 16px; font-weight: 800; margin-bottom: 14px;">Tambah Penerima Favorit</h3>
+
+        <div class="form-group">
+          <label class="form-label">Nama Penerima</label>
+          <input type="text" class="form-input" id="fav-modal-nama" placeholder="Contoh: Ibu Kos / Adik / Cicilan">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Nomor Rekening / Tujuan</label>
+          <input type="text" class="form-input" id="fav-modal-tujuan" placeholder="Nomor rekening atau ID">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Jenis Transaksi</label>
+          <select class="form-select" id="fav-modal-jenis">
+            <option value="Transfer">Transfer</option>
+            <option value="Top Up">Top Up</option>
+            <option value="Tagihan">Tagihan</option>
+          </select>
+        </div>
+
+        <div style="display:flex; gap:10px; margin-top:16px;">
+          <button class="btn btn-primary btn-block" onclick="App.saveNewFavoriteFromModal()">Simpan</button>
+          <button class="btn btn-secondary btn-block" onclick="App.closeModal('modal-tambah-favorit')">Batal</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==============================================
+         MODAL 4: EDIT LIMIT & AMBANG KEAMANAN
+         ============================================== -->
+    <div id="modal-edit-limit" class="modal-overlay">
+      <div class="modal-sheet">
+        <div class="modal-drag-bar"></div>
+        <h3 style="font-size: 16px; font-weight: 800; margin-bottom: 14px;">Ubah Pengaturan Keamanan</h3>
+
+        <div class="form-group">
+          <label class="form-label">Limit Transaksi Harian (Rp)</label>
+          <input type="number" inputmode="numeric" class="form-input" id="modal-input-limit" min="100000" step="100000">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Ambang Verifikasi Sidik Jari (Rp)</label>
+          <input type="number" inputmode="numeric" class="form-input" id="modal-input-ambang" min="50000" step="50000">
+          <div class="form-helper">Ambang tidak boleh melebihi Limit harian.</div>
+        </div>
+
+        <div style="display:flex; gap:10px; margin-top:16px;">
+          <button class="btn btn-primary btn-block" onclick="App.saveEditLimitModal()">Simpan</button>
+          <button class="btn btn-secondary btn-block" onclick="App.closeModal('modal-edit-limit')">Batal</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==============================================
+         MODAL 5: PILIH DURASI KUNCI TRANSAKSI KELUAR
+         ============================================== -->
+    <div id="modal-pilih-durasi-kunci" class="modal-overlay">
+      <div class="modal-sheet">
+        <div class="modal-drag-bar"></div>
+        <h3 style="font-size: 16px; font-weight: 800; margin-bottom: 4px;">Pilih Durasi Kunci Sementara</h3>
+        <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 16px;">Semua transaksi keluar akan ditolak selama masa kunci aktif.</p>
+
+        <div class="duration-selector">
+          <div class="duration-pill active" onclick="App.selectDuration(1, this)">1 Jam</div>
+          <div class="duration-pill" onclick="App.selectDuration(6, this)">6 Jam</div>
+          <div class="duration-pill" onclick="App.selectDuration(24, this)">24 Jam</div>
+        </div>
+
+        <div style="display:flex; gap:10px; margin-top:20px;">
+          <button class="btn btn-danger btn-block" onclick="App.confirmLockWithDuration()">Kunci Sekarang</button>
+          <button class="btn btn-secondary btn-block" onclick="App.closeModal('modal-pilih-durasi-kunci'); App.renderPusatKeamanan();">Batal</button>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- End phone-mockup -->
+
+</div><!-- End app-container -->
+
+<!-- Core Scripts in strict dependency order -->
+<script src="./js/data.js"></script>
+<script src="./js/storage.js"></script>
+<script src="./js/security.js"></script>
+<script src="./js/transaction.js"></script>
+<script src="./js/navigation.js"></script>
+<script src="./js/app.js"></script>
+
+<!-- Service Worker Registration for PWA Offline Capability -->
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('./sw.js', { scope: './' })
+        .then((reg) => {
+          console.log('[PWA] Service Worker terdaftar dengan scope:', reg.scope);
+        })
+        .catch((err) => {
+          console.warn('[PWA] Registrasi Service Worker gagal:', err);
+        });
+    });
+  }
+</script>
+
+</body>
+</html>

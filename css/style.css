@@ -1,0 +1,1386 @@
+/* ======================================================
+   Livin' Smart Assist — Main Stylesheet (css/style.css)
+   Inspired by Livin' by Mandiri Brand Identity:
+   - Deep Navy Blue (#00205B, #002D62)
+   - Accent Mandiri Gold/Yellow (#FFB703, #F59E0B)
+   - Electric Blue (#0075FF, #2563EB)
+   - Clean, modern, responsive mobile-first banking UI
+   ====================================================== */
+
+:root {
+  --primary-navy: #00264d;
+  --primary-blue: #0066cc;
+  --primary-blue-light: #e6f0fa;
+  --mandiri-gold: #ffb703;
+  --mandiri-gold-hover: #e09e00;
+  
+  --bg-app: #f4f7fb;
+  --bg-card: #ffffff;
+  --bg-subtle: #f8fafc;
+  
+  --text-main: #0f172a;
+  --text-secondary: #475569;
+  --text-muted: #94a3b8;
+  --text-white: #ffffff;
+  
+  --border-light: #e2e8f0;
+  --border-focus: #0066cc;
+
+  /* Status Colors */
+  --status-success-bg: #ecfdf5;
+  --status-success-text: #065f46;
+  --status-success-border: #a7f3d0;
+  
+  --status-pending-bg: #fffbeb;
+  --status-pending-text: #92400e;
+  --status-pending-border: #fde68a;
+  
+  --status-danger-bg: #fef2f2;
+  --status-danger-text: #991b1b;
+  --status-danger-border: #fecaca;
+
+  --status-held-bg: #fff7ed;
+  --status-held-text: #9a3412;
+  --status-held-border: #ffedd5;
+  
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+  --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.07), 0 2px 4px -1px rgba(0,0,0,0.04);
+  --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.08), 0 4px 6px -2px rgba(0,0,0,0.03);
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 18px;
+  --radius-full: 9999px;
+}
+
+html {
+  box-sizing: border-box;
+  -webkit-text-size-adjust: 100%;
+  height: 100%;
+}
+
+*, *:before, *:after {
+  box-sizing: inherit;
+  margin: 0;
+  padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  background: #0f172a;
+  color: var(--text-main);
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 100vh;
+  padding: 20px 10px;
+  touch-action: manipulation;
+  overscroll-behavior: none;
+}
+
+/* User-select behavior: disabled for controls, preserved for inputs */
+button, .nav-item-btn, .header-back-btn, .btn, .duration-pill, summary, .tab-btn, .menu-item-btn {
+  user-select: none;
+  -webkit-user-select: none;
+}
+input, textarea, select {
+  user-select: auto;
+  -webkit-user-select: auto;
+}
+
+/* App Outer Wrapper / Desktop Layout */
+.app-container {
+  display: flex;
+  gap: 24px;
+  max-width: 1200px;
+  width: 100%;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+/* Mobile Frame Wrapper */
+.phone-mockup {
+  width: 100%;
+  max-width: 420px;
+  height: 860px;
+  background: #ffffff;
+  border-radius: 40px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.45), 0 0 0 12px #1e293b;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+/* Phone Status Bar (Real-time Clock | 5G 87%) */
+.phone-status-bar {
+  height: 42px;
+  background: var(--primary-navy);
+  color: #ffffff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 24px;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.2px;
+  user-select: none;
+  z-index: 50;
+}
+
+.status-bar-icons {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+}
+
+/* Screen Content Area (Scrollable) */
+.screen-content {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  background: var(--bg-app);
+  padding-bottom: 74px; /* clearance for bottom nav */
+  position: relative;
+  scroll-behavior: smooth;
+}
+
+.screen-content::-webkit-scrollbar {
+  width: 4px;
+}
+.screen-content::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+
+/* ======================================================
+   PAGES / VIEWS
+   ====================================================== */
+.page-view {
+  display: none;
+  min-height: 100%;
+  animation: fadeIn 0.2s ease-in-out;
+}
+
+.page-view.active {
+  display: block;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* App Header (Standard & Blue Bar) */
+.livin-header {
+  background: linear-gradient(135deg, var(--primary-navy) 0%, #003876 100%);
+  color: #ffffff;
+  padding: 16px 20px 22px 20px;
+  position: relative;
+  border-bottom-left-radius: 20px;
+  border-bottom-right-radius: 20px;
+  box-shadow: var(--shadow-md);
+}
+
+.livin-header-sub {
+  background: var(--primary-navy);
+  color: #ffffff;
+  padding: 14px 18px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.header-back-btn {
+  background: rgba(255, 255, 255, 0.15);
+  border: none;
+  color: #fff;
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+  min-height: 44px;
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  cursor: pointer;
+  transition: 0.15s;
+}
+.header-back-btn:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.header-title-wrap h2 {
+  font-size: 17px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.header-title-wrap p {
+  font-size: 11px;
+  opacity: 0.85;
+  margin-top: 2px;
+}
+
+/* Home Header */
+.home-brand-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.brand-badge {
+  font-size: 19px;
+  font-weight: 800;
+  letter-spacing: -0.3px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.brand-badge span {
+  color: var(--mandiri-gold);
+}
+
+.header-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.icon-btn-header {
+  background: rgba(255, 255, 255, 0.15);
+  border: none;
+  color: #fff;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  font-size: 15px;
+}
+
+.badge-dot {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  width: 8px;
+  height: 8px;
+  background: #ef4444;
+  border-radius: 50%;
+  border: 1.5px solid var(--primary-navy);
+}
+
+.home-brand-title {
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: -0.3px;
+  color: #ffffff;
+  margin-bottom: 4px;
+}
+
+.home-greeting {
+  font-size: 13px;
+  opacity: 0.92;
+  color: #e2e8f0;
+}
+.home-greeting strong {
+  font-weight: 700;
+  color: var(--mandiri-gold);
+}
+
+/* Saldo Card */
+.saldo-card {
+  background: rgba(255, 255, 255, 0.12);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: var(--radius-md);
+  padding: 12px 16px;
+  margin-top: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.saldo-label {
+  font-size: 11px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  opacity: 0.8;
+}
+
+.saldo-amount {
+  font-size: 20px;
+  font-weight: 700;
+  margin-top: 2px;
+  color: #ffffff;
+}
+
+.saldo-btn-eye {
+  background: none;
+  border: none;
+  color: #ffffff;
+  opacity: 0.8;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+/* Search Bar (Quick Search) */
+.search-bar-widget {
+  padding: 14px 18px 8px 18px;
+}
+
+.search-input-box {
+  background: #ffffff;
+  border: 1.5px solid var(--border-light);
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  padding: 10px 16px;
+  box-shadow: var(--shadow-sm);
+  cursor: pointer;
+  transition: 0.2s;
+}
+.search-input-box:hover, .search-input-box:focus-within {
+  border-color: var(--primary-blue);
+  box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.12);
+}
+
+.search-input-box input {
+  border: none;
+  outline: none;
+  background: transparent;
+  width: 100%;
+  margin-left: 10px;
+  font-size: 16px;
+  color: var(--text-main);
+}
+.search-input-box input::placeholder {
+  color: var(--text-muted);
+}
+
+/* Section Containers */
+.section-wrap {
+  padding: 10px 18px;
+}
+
+.section-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.section-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.section-link {
+  font-size: 12px;
+  color: var(--primary-blue);
+  text-decoration: none;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* Favorite Horizontal Row */
+.favorites-row {
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  padding: 4px 2px 8px 2px;
+  scrollbar-width: none;
+}
+.favorites-row::-webkit-scrollbar {
+  display: none;
+}
+
+.fav-item-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  min-width: 68px;
+  cursor: pointer;
+  text-align: center;
+}
+
+.fav-avatar {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: #ffffff;
+  border: 1.5px solid #e2e8f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  color: var(--primary-navy);
+  box-shadow: var(--shadow-sm);
+  transition: 0.15s transform, 0.15s border-color;
+}
+.fav-item-col:hover .fav-avatar {
+  transform: translateY(-2px);
+  border-color: var(--primary-blue);
+}
+
+.fav-avatar.fav-add {
+  background: #f1f5f9;
+  border: 1.5px dashed #94a3b8;
+  color: #64748b;
+  font-size: 20px;
+}
+
+.fav-name {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-main);
+  max-width: 68px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Grid Menu (8 Icons in Normal Mode) */
+.menu-grid-8 {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  background: #ffffff;
+  padding: 16px 12px;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border-light);
+}
+
+.menu-item-btn {
+  background: none;
+  border: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  padding: 6px 4px;
+  border-radius: var(--radius-md);
+  transition: 0.15s;
+}
+.menu-item-btn:hover {
+  background: var(--bg-subtle);
+  transform: translateY(-2px);
+}
+
+.menu-icon-box {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-md);
+  background: var(--primary-blue-light);
+  color: var(--primary-blue);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  box-shadow: 0 2px 4px rgba(0, 102, 204, 0.08);
+}
+
+.menu-icon-box.gold {
+  background: #fff8e1;
+  color: #b45309;
+}
+.menu-icon-box.green {
+  background: #ecfdf5;
+  color: #059669;
+}
+.menu-icon-box.purple {
+  background: #f3e8ff;
+  color: #7c3aed;
+}
+
+.menu-title-text {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-main);
+  text-align: center;
+  line-height: 1.2;
+}
+
+/* ======================================================
+   MODE SEDERHANA (4 Big Tiles)
+   ====================================================== */
+.sederhana-wrap {
+  padding: 20px;
+}
+
+.sederhana-header-card {
+  background: linear-gradient(135deg, var(--primary-navy) 0%, #004c99 100%);
+  color: #ffffff;
+  padding: 20px;
+  border-radius: var(--radius-lg);
+  margin-bottom: 24px;
+  box-shadow: var(--shadow-md);
+}
+.sederhana-header-card h1 {
+  font-size: 22px;
+  font-weight: 800;
+  margin-bottom: 4px;
+}
+.sederhana-header-card p {
+  font-size: 13px;
+  opacity: 0.88;
+}
+
+.sederhana-grid-4 {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.sederhana-btn {
+  background: #ffffff;
+  border: 1.5px solid var(--border-light);
+  border-radius: 20px;
+  padding: 24px 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  cursor: pointer;
+  box-shadow: var(--shadow-sm);
+  transition: 0.2s all;
+  text-decoration: none;
+}
+.sederhana-btn:hover {
+  border-color: var(--primary-blue);
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-md);
+}
+
+.sederhana-icon {
+  width: 68px;
+  height: 68px;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32px;
+}
+.sederhana-icon.transfer { background: #e0f2fe; color: #0284c7; }
+.sederhana-icon.topup    { background: #fef3c7; color: #d97706; }
+.sederhana-icon.bayar    { background: #dcfce7; color: #16a34a; }
+.sederhana-icon.pantau   { background: #ede9fe; color: #7c3aed; }
+
+.sederhana-label {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.mode-switch-card {
+  background: #ffffff;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-light);
+  padding: 16px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: var(--shadow-sm);
+}
+
+.mode-switch-info h4 {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-main);
+}
+.mode-switch-info p {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+/* ======================================================
+   TABS COMPONENT
+   ====================================================== */
+.tabs-nav {
+  display: flex;
+  background: #ffffff;
+  padding: 6px;
+  border-bottom: 1px solid var(--border-light);
+  gap: 6px;
+}
+
+.tab-btn {
+  flex: 1;
+  background: transparent;
+  border: none;
+  padding: 9px 12px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: 0.15s;
+  text-align: center;
+}
+.tab-btn.active {
+  background: var(--primary-blue-light);
+  color: var(--primary-blue);
+  font-weight: 700;
+}
+
+/* ======================================================
+   CARDS & LIST ITEMS
+   ====================================================== */
+.card {
+  background: #ffffff;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-light);
+  padding: 14px 16px;
+  margin-bottom: 10px;
+  box-shadow: var(--shadow-sm);
+  transition: 0.15s transform, 0.15s border-color;
+}
+
+.card:hover {
+  border-color: #cbd5e1;
+}
+
+.card-clickable {
+  cursor: pointer;
+}
+.card-clickable:hover {
+  transform: translateY(-2px);
+  border-color: var(--primary-blue);
+  box-shadow: var(--shadow-md);
+}
+
+/* Transaction Item Row */
+.trx-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.trx-left {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.trx-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.trx-meta {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.trx-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+}
+
+.trx-nominal {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+/* STATUS BADGES — TEXT-BASED LABELS (Rule Mandate) */
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 8px;
+  border-radius: var(--radius-full);
+  font-size: 11px;
+  font-weight: 700;
+  border: 1px solid transparent;
+  text-transform: capitalize;
+}
+
+.status-badge.status-berhasil {
+  background: var(--status-success-bg);
+  color: var(--status-success-text);
+  border-color: var(--status-success-border);
+}
+
+.status-badge.status-tertunda {
+  background: var(--status-pending-bg);
+  color: var(--status-pending-text);
+  border-color: var(--status-pending-border);
+}
+
+.status-badge.status-gagal {
+  background: var(--status-danger-bg);
+  color: var(--status-danger-text);
+  border-color: var(--status-danger-border);
+}
+
+.status-badge.status-ditahan {
+  background: var(--status-held-bg);
+  color: var(--status-held-text);
+  border-color: var(--status-held-border);
+}
+
+/* Schedule Card */
+.jadwal-card-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 8px;
+}
+
+.jadwal-badge-aktif {
+  background: #ecfdf5;
+  color: #047857;
+  padding: 2px 8px;
+  border-radius: 9999px;
+  font-size: 11px;
+  font-weight: 700;
+}
+.jadwal-badge-dijeda {
+  background: #f1f5f9;
+  color: #64748b;
+  padding: 2px 8px;
+  border-radius: 9999px;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.jadwal-info-grid {
+  font-size: 12px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  margin-bottom: 10px;
+}
+
+.jadwal-actions {
+  display: flex;
+  gap: 8px;
+  padding-top: 8px;
+  border-top: 1px dashed var(--border-light);
+}
+
+/* Primary & Action Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 10px 18px;
+  min-height: 44px;
+  border-radius: var(--radius-md);
+  border: none;
+  cursor: pointer;
+  transition: 0.15s all;
+  text-decoration: none;
+}
+
+.btn-primary {
+  background: var(--primary-navy);
+  color: #ffffff;
+}
+.btn-primary:hover {
+  background: #00366f;
+}
+
+.btn-secondary {
+  background: #f1f5f9;
+  color: var(--text-secondary);
+  border: 1px solid var(--border-light);
+}
+.btn-secondary:hover {
+  background: #e2e8f0;
+}
+
+.btn-gold {
+  background: var(--mandiri-gold);
+  color: #00205b;
+}
+.btn-gold:hover {
+  background: var(--mandiri-gold-hover);
+}
+
+.btn-danger {
+  background: #fee2e2;
+  color: #b91c1c;
+  border: 1px solid #fecaca;
+}
+.btn-danger:hover {
+  background: #fecaca;
+}
+
+.btn-sm {
+  padding: 6px 12px;
+  font-size: 11px;
+  border-radius: var(--radius-sm);
+}
+
+.btn-block {
+  width: 100%;
+}
+
+/* Floating Action Button / Add Button */
+.fab-container {
+  padding: 16px 18px;
+}
+
+/* ======================================================
+   FORMS & INPUTS
+   ====================================================== */
+.form-group {
+  margin-bottom: 16px;
+}
+
+.form-label {
+  display: block;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-main);
+  margin-bottom: 6px;
+}
+
+.form-input, .form-select {
+  width: 100%;
+  padding: 11px 14px;
+  border-radius: var(--radius-md);
+  border: 1.5px solid var(--border-light);
+  font-size: 16px;
+  color: var(--text-main);
+  background: #ffffff;
+  outline: none;
+  transition: 0.2s;
+}
+
+.form-input:focus, .form-select:focus {
+  border-color: var(--primary-blue);
+  box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.12);
+}
+
+.form-helper {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+
+.form-error {
+  font-size: 11px;
+  color: #dc2626;
+  margin-top: 4px;
+  display: none;
+}
+.form-error.visible {
+  display: block;
+}
+
+/* Banner Info Box */
+.info-box {
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  border-radius: var(--radius-md);
+  padding: 12px 14px;
+  font-size: 12px;
+  color: #1e40af;
+  margin-bottom: 16px;
+  line-height: 1.4;
+  display: flex;
+  gap: 8px;
+}
+
+.info-box.warning {
+  background: #fffbeb;
+  border-color: #fde68a;
+  color: #92400e;
+}
+
+/* ======================================================
+   BOTTOM NAVIGATION BAR (Beranda, Otomatis, Pantau, Keamanan)
+   ====================================================== */
+.bottom-nav {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 68px;
+  background: #ffffff;
+  border-top: 1px solid var(--border-light);
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  z-index: 40;
+  padding-bottom: 6px;
+  box-shadow: 0 -2px 10px rgba(0,0,0,0.04);
+}
+
+.nav-item-btn {
+  background: none;
+  border: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  cursor: pointer;
+  flex: 1;
+  min-height: 44px;
+  min-width: 44px;
+  color: #64748b;
+  transition: 0.15s;
+}
+
+.nav-item-btn svg, .nav-item-btn i {
+  font-size: 20px;
+}
+
+.nav-item-btn span {
+  font-size: 10px;
+  font-weight: 600;
+}
+
+.nav-item-btn.active {
+  color: var(--primary-navy);
+}
+.nav-item-btn.active span {
+  font-weight: 800;
+}
+
+/* ======================================================
+   TOGGLE SWITCH COMPONENT
+   ====================================================== */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 48px;
+  height: 26px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-color: #cbd5e1;
+  transition: .25s;
+  border-radius: 34px;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 20px;
+  width: 20px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  transition: .25s;
+  border-radius: 50%;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+}
+
+input:checked + .slider {
+  background-color: #10b981;
+}
+
+input:checked + .slider:before {
+  transform: translateX(22px);
+}
+
+/* Radio Pill Selector for Duration */
+.duration-selector {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.duration-pill {
+  flex: 1;
+  padding: 8px 6px;
+  border-radius: var(--radius-md);
+  border: 1.5px solid var(--border-light);
+  background: #ffffff;
+  color: var(--text-secondary);
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  text-align: center;
+  transition: 0.15s;
+}
+
+.duration-pill.active {
+  border-color: var(--primary-blue);
+  background: var(--primary-blue-light);
+  color: var(--primary-blue);
+}
+
+/* ======================================================
+   MODALS / OVERLAYS
+   ====================================================== */
+.modal-overlay {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(15, 23, 42, 0.65);
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+  display: none;
+  align-items: flex-end;
+  justify-content: center;
+  z-index: 100;
+}
+.modal-overlay.active {
+  display: flex;
+}
+
+.modal-sheet {
+  background: #ffffff;
+  width: 100%;
+  border-top-left-radius: 26px;
+  border-top-right-radius: 26px;
+  padding: 24px 20px;
+  box-shadow: 0 -10px 25px rgba(0,0,0,0.15);
+  max-height: 85%;
+  overflow-y: auto;
+  animation: slideUp 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes slideUp {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
+.modal-drag-bar {
+  width: 40px;
+  height: 4px;
+  background: #cbd5e1;
+  border-radius: 2px;
+  margin: 0 auto 16px auto;
+}
+
+/* Fingerprint Modal UI (Gambar 5.7) */
+.fingerprint-icon-box {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: #eff6ff;
+  color: var(--primary-blue);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 38px;
+  margin: 16px auto;
+  cursor: pointer;
+  border: 2px dashed #93c5fd;
+  transition: 0.2s all;
+}
+.fingerprint-icon-box:hover {
+  transform: scale(1.05);
+  background: #dbeafe;
+}
+
+/* Peringatan Saldo Minimum UI (Gambar 5.4) */
+.saldo-min-alert-banner {
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  color: #991b1b;
+  padding: 12px 14px;
+  border-radius: var(--radius-md);
+  margin-bottom: 16px;
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+/* ======================================================
+   TEST RUNNER SIDEBAR / DESKTOP TESTING CONSOLE
+   ====================================================== */
+.test-panel-wrapper {
+  flex: 1;
+  max-width: 580px;
+  background: #1e293b;
+  border-radius: 24px;
+  padding: 20px;
+  color: #f1f5f9;
+  box-shadow: var(--shadow-lg);
+  height: 860px;
+  display: flex;
+  flex-direction: column;
+}
+
+.test-panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 14px;
+  border-bottom: 1px solid #334155;
+  margin-bottom: 14px;
+}
+
+.test-panel-title {
+  font-size: 16px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.test-panel-title span {
+  color: var(--mandiri-gold);
+}
+
+.test-stats-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.stat-chip {
+  background: #0f172a;
+  padding: 8px 10px;
+  border-radius: var(--radius-sm);
+  text-align: center;
+  border: 1px solid #334155;
+}
+.stat-chip .num {
+  font-size: 16px;
+  font-weight: 800;
+  color: #38bdf8;
+}
+.stat-chip.success .num { color: #4ade80; }
+.stat-chip .lbl {
+  font-size: 10px;
+  color: #94a3b8;
+  margin-top: 2px;
+}
+
+.test-list-scroll {
+  flex: 1;
+  overflow-y: auto;
+  padding-right: 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.test-list-scroll::-webkit-scrollbar {
+  width: 5px;
+}
+.test-list-scroll::-webkit-scrollbar-thumb {
+  background: #475569;
+  border-radius: 4px;
+}
+
+.test-item-card {
+  background: #0f172a;
+  border: 1px solid #334155;
+  border-radius: var(--radius-sm);
+  padding: 10px 12px;
+  font-size: 11px;
+}
+.test-item-card.pass {
+  border-left: 4px solid #22c55e;
+}
+.test-item-card.fail {
+  border-left: 4px solid #ef4444;
+}
+
+.test-item-head {
+  display: flex;
+  justify-content: space-between;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+.test-item-head .test-id {
+  color: var(--mandiri-gold);
+}
+.test-item-head .test-status {
+  padding: 1px 6px;
+  border-radius: 4px;
+  font-size: 10px;
+}
+.test-status.sesuai {
+  background: rgba(34, 197, 94, 0.2);
+  color: #4ade80;
+}
+
+.test-detail-text {
+  color: #94a3b8;
+  line-height: 1.35;
+}
+
+/* Demo Settings Accordion (Pusat Keamanan) */
+.demo-accordion {
+  margin-top: 24px;
+  margin-bottom: 20px;
+  background: var(--bg-card);
+  border: 1px dashed #cbd5e1;
+  border-radius: var(--radius-md);
+  padding: 12px 14px;
+  transition: all 0.2s ease;
+}
+.demo-accordion[open] {
+  border-color: #94a3b8;
+  background: #f8fafc;
+  box-shadow: var(--shadow-sm);
+}
+.demo-accordion summary {
+  cursor: pointer;
+  list-style: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  user-select: none;
+}
+.demo-accordion summary::-webkit-details-marker {
+  display: none;
+}
+.demo-accordion summary .summary-arrow {
+  font-size: 12px;
+  transition: transform 0.2s;
+  color: var(--text-muted);
+}
+.demo-accordion[open] summary .summary-arrow {
+  transform: rotate(180deg);
+}
+.demo-content-body {
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border-light);
+}
+
+/* App Toast for Mobile Feedback */
+.app-toast {
+  position: fixed;
+  bottom: 84px;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: rgba(15, 23, 42, 0.92);
+  color: #ffffff;
+  padding: 10px 18px;
+  border-radius: var(--radius-full);
+  font-size: 12px;
+  font-weight: 600;
+  box-shadow: var(--shadow-lg);
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.25s ease;
+  z-index: 999;
+  white-space: nowrap;
+}
+.app-toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* ======================================================
+   RESPONSIVE LAYOUT & PWA MOBILE OPTIMIZATION
+   Applies to screens <= 500px OR display-mode: standalone
+   ====================================================== */
+@media screen and (max-width: 500px), screen and (display-mode: standalone) {
+  html, body {
+    width: 100%;
+    height: 100%;
+    overflow-x: hidden;
+  }
+
+  body {
+    background: var(--bg-app);
+    padding: 0;
+    margin: 0;
+    width: 100vw;
+    min-height: 100vh;
+    min-height: 100dvh;
+    height: 100vh;
+    height: 100dvh;
+    overflow: hidden;
+  }
+
+  .app-container {
+    width: 100vw;
+    max-width: 100vw;
+    height: 100vh;
+    height: 100dvh;
+    padding: 0;
+    margin: 0;
+    gap: 0;
+  }
+
+  /* Hilangkan bingkai ponsel, sudut membulat luar, bayangan, dan border */
+  .phone-mockup {
+    width: 100vw;
+    max-width: 100vw;
+    height: 100vh;
+    height: 100dvh;
+    border-radius: 0;
+    box-shadow: none;
+    border: none;
+  }
+
+  /* Sembunyikan status bar tiruan di HP sungguhan */
+  .phone-status-bar {
+    display: none !important;
+  }
+
+  /* Safe Area Insets: Notch / Dynamic Island iPhone */
+  .livin-header {
+    padding-top: calc(18px + env(safe-area-inset-top, 0px));
+    padding-left: calc(18px + env(safe-area-inset-left, 0px));
+    padding-right: calc(18px + env(safe-area-inset-right, 0px));
+    border-radius: 0 0 20px 20px;
+  }
+
+  .livin-header-sub {
+    padding-top: calc(14px + env(safe-area-inset-top, 0px));
+    padding-left: calc(16px + env(safe-area-inset-left, 0px));
+    padding-right: calc(16px + env(safe-area-inset-right, 0px));
+  }
+
+  /* Safe Area Insets: Home Indicator iPhone pada Bottom Nav */
+  .bottom-nav {
+    position: fixed;
+    height: calc(68px + env(safe-area-inset-bottom, 0px));
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100vw;
+  }
+
+  .screen-content {
+    padding-bottom: calc(84px + env(safe-area-inset-bottom, 0px));
+    height: 100%;
+  }
+
+  /* Bottom sheet modal responsiveness */
+  .modal-overlay {
+    position: fixed;
+  }
+
+  .modal-sheet {
+    max-height: calc(90vh - env(safe-area-inset-top, 0px));
+    max-height: calc(90dvh - env(safe-area-inset-top, 0px));
+    padding-bottom: calc(28px + env(safe-area-inset-bottom, 0px));
+  }
+}

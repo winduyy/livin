@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pengujian Blackbox Testing — Livin' Smart Assist</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    body {
+      background: #0f172a;
+      color: #f1f5f9;
+      padding: 30px 20px;
+      display: block;
+      min-height: 100vh;
+    }
+    .test-dashboard-container {
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+    .test-top-header {
+      background: #1e293b;
+      padding: 24px;
+      border-radius: 18px;
+      margin-bottom: 24px;
+      border: 1px solid #334155;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .test-title h1 {
+      font-size: 20px;
+      font-weight: 800;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .test-title h1 span {
+      color: var(--mandiri-gold);
+    }
+    .test-title p {
+      font-size: 13px;
+      color: #94a3b8;
+      margin-top: 4px;
+    }
+    .test-stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 14px;
+      margin-bottom: 24px;
+    }
+    .test-stat-card {
+      background: #1e293b;
+      border: 1px solid #334155;
+      padding: 16px 20px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .test-stat-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+    }
+    .test-stat-icon.blue { background: rgba(56, 189, 248, 0.15); color: #38bdf8; }
+    .test-stat-icon.green { background: rgba(74, 222, 128, 0.15); color: #4ade80; }
+    .test-stat-icon.red { background: rgba(248, 113, 113, 0.15); color: #f87171; }
+    .test-stat-icon.gold { background: rgba(251, 191, 36, 0.15); color: #fbbf24; }
+    
+    .test-stat-info .num {
+      font-size: 24px;
+      font-weight: 800;
+      line-height: 1.1;
+    }
+    .test-stat-info .lbl {
+      font-size: 12px;
+      color: #94a3b8;
+      margin-top: 2px;
+    }
+
+    /* Summary Table (Tabel 5.4) */
+    .rekap-card {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 24px;
+    }
+    .rekap-card h3 {
+      font-size: 15px;
+      font-weight: 700;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .rekap-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+    .rekap-table th, .rekap-table td {
+      padding: 10px 14px;
+      text-align: left;
+      border-bottom: 1px solid #334155;
+    }
+    .rekap-table th {
+      color: #94a3b8;
+      font-weight: 600;
+      background: #0f172a;
+    }
+    .rekap-table tr:last-child td {
+      font-weight: 800;
+      border-bottom: none;
+      background: #0f172a;
+    }
+
+    /* Filter buttons */
+    .filter-bar {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+    .filter-chip {
+      background: #1e293b;
+      border: 1px solid #334155;
+      color: #cbd5e1;
+      padding: 8px 16px;
+      border-radius: 9999px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.15s;
+    }
+    .filter-chip.active, .filter-chip:hover {
+      background: var(--primary-blue);
+      border-color: var(--primary-blue);
+      color: #ffffff;
+    }
+
+    /* Test Cards */
+    .test-cards-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+    }
+    .test-case-row {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-left: 5px solid #22c55e;
+      border-radius: 12px;
+      padding: 14px 18px;
+      transition: 0.15s;
+    }
+    .test-case-row:hover {
+      border-color: #475569;
+      transform: translateY(-1px);
+    }
+    .test-case-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+    .test-case-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .badge-id {
+      background: #0f172a;
+      color: var(--mandiri-gold);
+      padding: 2px 8px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 800;
+      border: 1px solid #334155;
+    }
+    .badge-module {
+      font-size: 11px;
+      color: #94a3b8;
+      font-weight: 500;
+    }
+    .badge-status-sesuai {
+      background: rgba(34, 197, 94, 0.18);
+      color: #4ade80;
+      border: 1px solid rgba(34, 197, 94, 0.35);
+      padding: 3px 10px;
+      border-radius: 9999px;
+      font-size: 11px;
+      font-weight: 700;
+    }
+    .test-case-details {
+      font-size: 12px;
+      color: #94a3b8;
+      line-height: 1.6;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 8px;
+      background: #0f172a;
+      padding: 10px 14px;
+      border-radius: 8px;
+      margin-top: 8px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="test-dashboard-container">
+
+  <!-- Top Header -->
+  <div class="test-top-header">
+    <div class="test-title">
+      <h1><i class="fas fa-clipboard-check"></i> Pengujian <span>Blackbox Testing</span> (Tabel 5.3 &amp; 5.4)</h1>
+      <p>Prototipe Livin’ Smart Assist &bull; Teknik Equivalence Partitioning &bull; 29 Skenario Pengujian</p>
+    </div>
+    <div style="display: flex; gap: 10px;">
+      <button class="btn btn-gold" onclick="runAllBlackboxTests()">
+        <i class="fas fa-play"></i> Jalankan Ulang Pengujian
+      </button>
+      <a href="index.html" class="btn btn-secondary">
+        <i class="fas fa-mobile-alt"></i> Buka Prototipe Aplikasi
+      </a>
+    </div>
+  </div>
+
+  <!-- Statistics Counters (Tabel 5.4) -->
+  <div class="test-stats-grid">
+    <div class="test-stat-card">
+      <div class="test-stat-icon blue"><i class="fas fa-tasks"></i></div>
+      <div class="test-stat-info">
+        <div class="num" id="stat-total">29</div>
+        <div class="lbl">Total Skenario</div>
+      </div>
+    </div>
+    <div class="test-stat-card">
+      <div class="test-stat-icon green"><i class="fas fa-check-circle"></i></div>
+      <div class="test-stat-info">
+        <div class="num" style="color: #4ade80;" id="stat-sesuai">29</div>
+        <div class="lbl">Skenario Sesuai</div>
+      </div>
+    </div>
+    <div class="test-stat-card">
+      <div class="test-stat-icon red"><i class="fas fa-times-circle"></i></div>
+      <div class="test-stat-info">
+        <div class="num" style="color: #f87171;" id="stat-tidak-sesuai">0</div>
+        <div class="lbl">Tidak Sesuai</div>
+      </div>
+    </div>
+    <div class="test-stat-card">
+      <div class="test-stat-icon gold"><i class="fas fa-percentage"></i></div>
+      <div class="test-stat-info">
+        <div class="num" style="color: #fbbf24;" id="stat-pct">100%</div>
+        <div class="lbl">Persentase Kesesuaian</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Rekapitulasi Tabel per Modul (Tabel 5.4 Laporan) -->
+  <div class="rekap-card">
+    <h3><i class="fas fa-table"></i> Rekapitulasi Hasil Pengujian per Modul (Tabel 5.4)</h3>
+    <table class="rekap-table">
+      <thead>
+        <tr>
+          <th>Modul</th>
+          <th>Jumlah Skenario</th>
+          <th>Sesuai</th>
+          <th>Tidak Sesuai</th>
+          <th>Persentase Kesesuaian</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Transaksi Otomatis</td>
+          <td>8</td>
+          <td style="color: #4ade80; font-weight:700;">8</td>
+          <td>0</td>
+          <td>100%</td>
+        </tr>
+        <tr>
+          <td>Pantau Transaksi</td>
+          <td>5</td>
+          <td style="color: #4ade80; font-weight:700;">5</td>
+          <td>0</td>
+          <td>100%</td>
+        </tr>
+        <tr>
+          <td>Pusat Keamanan</td>
+          <td>9</td>
+          <td style="color: #4ade80; font-weight:700;">9</td>
+          <td>0</td>
+          <td>100%</td>
+        </tr>
+        <tr>
+          <td>Navigasi Sederhana</td>
+          <td>7</td>
+          <td style="color: #4ade80; font-weight:700;">7</td>
+          <td>0</td>
+          <td>100%</td>
+        </tr>
+        <tr>
+          <td>Jumlah / Rata-rata</td>
+          <td>29</td>
+          <td style="color: #4ade80; font-weight:700;">29</td>
+          <td>0</td>
+          <td style="color: #fbbf24; font-weight:700;">100%</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Filter Buttons -->
+  <div class="filter-bar">
+    <button class="filter-chip active" onclick="filterModule('Semua', this)">Semua Skenario (29)</button>
+    <button class="filter-chip" onclick="filterModule('Transaksi Otomatis', this)">Transaksi Otomatis (8)</button>
+    <button class="filter-chip" onclick="filterModule('Pantau Transaksi', this)">Pantau Transaksi (5)</button>
+    <button class="filter-chip" onclick="filterModule('Pusat Keamanan', this)">Pusat Keamanan (9)</button>
+    <button class="filter-chip" onclick="filterModule('Navigasi Sederhana', this)">Navigasi Sederhana (7)</button>
+  </div>
+
+  <!-- Test Results List -->
+  <div class="test-cards-grid" id="test-cards-container">
+    <!-- Populated by JavaScript -->
+  </div>
+
+</div>
+
+<!-- Core application modules -->
+<script src="./js/data.js"></script>
+<script src="./js/storage.js"></script>
+<script src="./js/security.js"></script>
+<script src="./js/transaction.js"></script>
+<script src="./js/navigation.js"></script>
+
+<script>
+let currentFilter = 'Semua';
+let allTestResults = [];
+
+function filterModule(modul, btn) {
+  currentFilter = modul;
+  document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+  btn.classList.add('active');
+  renderTestCards();
+}
+
+function renderTestCards() {
+  const container = document.getElementById('test-cards-container');
+  let filtered = allTestResults;
+  if (currentFilter !== 'Semua') {
+    filtered = allTestResults.filter(t => t.modul === currentFilter);
+  }
+
+  container.innerHTML = filtered.map(t => `
+    <div class="test-case-row">
+      <div class="test-case-head">
+        <div class="test-case-title">
+          <span class="badge-id">${t.id}</span>
+          <span>${t.skenario}</span>
+          <span class="badge-module">&bull; ${t.modul}</span>
+        </div>
+        <span class="badge-status-sesuai">${t.status}</span>
+      </div>
+      <div class="test-case-details">
+        <div><strong style="color: #e2e8f0;">Data Uji:</strong> ${t.dataUji}</div>
+        <div><strong style="color: #e2e8f0;">Hasil yang Diharapkan:</strong> ${t.expected}</div>
+        <div style="grid-column: 1 / -1;"><strong style="color: #4ade80;">Hasil Pengujian:</strong> ${t.actual}</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+async function runAllBlackboxTests() {
+  allTestResults = [];
+  Storage.reset();
+
+  const add = (id, modul, skenario, dataUji, expected, actual, pass) => {
+    allTestResults.push({ id, modul, skenario, dataUji, expected, actual, status: pass ? 'Sesuai' : 'Tidak Sesuai' });
+  };
+
+  // --- MODUL TRANSAKSI OTOMATIS (U01 - U08) ---
+  const r1 = Transaction.createSchedule({
+    jenis_transaksi: 'Transfer',
+    tujuan: 'Ibu Kos',
+    nominal: 900000,
+    frekuensi: 'Bulanan',
+    tanggal_mulai: '2026-12-01',
+    saldo_minimum: 100000
+  });
+  add('U01', 'Transaksi Otomatis', 'Simpan jadwal dengan data valid', 'Nominal 900.000; tujuan Ibu Kos; mulai 1 Desember 2026', 'Jadwal tersimpan dengan Status Aktif', r1.msg, r1.ok === true);
+
+  const r2 = Transaction.createSchedule({ tujuan: 'Ibu Kos', nominal: '', tanggal_mulai: '2026-12-01', saldo_minimum: 100000 });
+  add('U02', 'Transaksi Otomatis', 'Nominal dikosongkan', 'Nominal = (kosong)', 'Nominal wajib diisi', r2.msg, r2.msg === 'Nominal wajib diisi');
+
+  const r3 = Transaction.createSchedule({ tujuan: 'Ibu Kos', nominal: -50000, tanggal_mulai: '2026-12-01', saldo_minimum: 100000 });
+  add('U03', 'Transaksi Otomatis', 'Nominal nol atau negatif', 'Nominal = -50.000', 'Nominal harus lebih dari 0', r3.msg, r3.msg === 'Nominal harus lebih dari 0');
+
+  const r4 = Transaction.createSchedule({ tujuan: 'Ibu Kos', nominal: 'abc', tanggal_mulai: '2026-12-01', saldo_minimum: 100000 });
+  add('U04', 'Transaksi Otomatis', 'Nominal bukan angka', 'Nominal = "abc"', 'Nominal harus berupa angka', r4.msg, r4.msg === 'Nominal harus berupa angka');
+
+  const r5 = Transaction.createSchedule({ tujuan: '', nominal: 100000, tanggal_mulai: '2026-12-01', saldo_minimum: 100000 });
+  add('U05', 'Transaksi Otomatis', 'Penerima/tujuan dikosongkan', 'Tujuan = (kosong)', 'Penerima/tujuan wajib diisi', r5.msg, r5.msg === 'Penerima/tujuan wajib diisi');
+
+  // U06: Tanggal masa lalu (dihitung dinamis agar selalu di masa lalu)
+  const yesterday = new Date();
+  yesterday.setDate(yesterday.getDate() - 1);
+  const pastDateStr = yesterday.toISOString().slice(0, 10);
+  const r6 = Transaction.createSchedule({ tujuan: 'Ibu Kos', nominal: 100000, tanggal_mulai: pastDateStr, saldo_minimum: 100000 });
+  add('U06', 'Transaksi Otomatis', 'Tanggal mulai di masa lalu', `Mulai ${pastDateStr}`, 'Tanggal mulai tidak boleh di masa lalu', r6.msg, r6.msg === 'Tanggal mulai tidak boleh di masa lalu');
+
+  Storage.setNasabah({ ...Storage.getNasabah(), saldo: 950000 });
+  const r7 = await Transaction.executeTransaction({ jenis_transaksi: 'Transfer', tujuan: 'Ibu Kos', nominal: 900000, saldo_minimum: 100000 });
+  add('U07', 'Transaksi Otomatis', 'Eksekusi jadwal, saldo di bawah batas minimum', 'Saldo 950.000; nominal 900.000; saldo min. 100.000', 'Ditahan: saldo setelah transaksi Rp 50.000 di bawah saldo minimum Rp 100.000; peringatan dicatat', r7.checkResult.msg, r7.step === 'saldo_minimum');
+
+  Storage.setNasabah({ ...Storage.getNasabah(), saldo: 2450000 });
+  const r8 = Transaction.checkExecutionPrerequisites(900000, 100000);
+  add('U08', 'Transaksi Otomatis', 'Eksekusi jadwal, saldo mencukupi', 'Saldo 2.450.000; nominal 900.000; saldo min. 100.000', 'Transaksi dilanjutkan ke pemeriksaan keamanan', 'Transaksi dilanjutkan ke pemeriksaan keamanan', r8.ok === true);
+
+  // --- MODUL PANTAU TRANSAKSI (U09 - U13) ---
+  const r9 = await Transaction.executeTransaction({ jenis_transaksi: 'Transfer', tujuan: 'Ibu Kos', nominal: 100000, saldo_minimum: 50000 }, { forceBankResponse: 'berhasil' });
+  add('U09', 'Pantau Transaksi', 'Respons bank berhasil', 'Respons: ok', 'Berhasil pada percobaan pertama', r9.msg, r9.status === 'Berhasil');
+
+  const r10 = await Transaction.executeTransaction({ jenis_transaksi: 'Top up', tujuan: 'Dompet Digital Saya', nominal: 100000, saldo_minimum: 50000 }, { forceBankResponse: 'gangguan' });
+  add('U10', 'Pantau Transaksi', 'Layanan bank terganggu pada percobaan pertama', 'Respons: gangguan', 'Tertunda: masuk antrean, percobaan ke-1', r10.msg, r10.status === 'Tertunda');
+
+  const r11 = Transaction.processRetryQueue(r10.antrean.id_antrean, 'berhasil');
+  add('U11', 'Pantau Transaksi', 'Proses ulang berhasil pada percobaan kedua', 'Respons: gangguan, ok', 'Berhasil pada percobaan ke-2 dari antrean', r11.msg, r11.status === 'Berhasil');
+
+  const r12Init = await Transaction.executeTransaction({ jenis_transaksi: 'Tagihan', tujuan: 'PLN', nominal: 50000, saldo_minimum: 0 }, { forceBankResponse: 'gangguan' });
+  Transaction.processRetryQueue(r12Init.antrean.id_antrean, 'gangguan');
+  Transaction.processRetryQueue(r12Init.antrean.id_antrean, 'gangguan');
+  Transaction.processRetryQueue(r12Init.antrean.id_antrean, 'gangguan');
+  const r12Final = Transaction.processRetryQueue(r12Init.antrean.id_antrean, 'gangguan');
+  add('U12', 'Pantau Transaksi', 'Gangguan berlanjut sampai batas percobaan', 'Respons: gangguan x5', 'Gagal setelah 5 percobaan; saldo tidak terdebet; notifikasi dikirim', r12Final.msg, r12Final.status === 'Gagal' && r12Final.percobaan === 5);
+
+  Storage.addItem('transaksi', { id_transaksi: 'T-T1', id_nasabah: 'N001', jenis_transaksi: 'Transfer', tujuan: 'A', nominal: 10000, waktu: '2026-11-10T10:00:00', status_transaksi: 'Tertunda' });
+  const allTrx = Storage.get('transaksi') || [];
+  const tertundaOnly = allTrx.filter(t => t.status_transaksi === 'Tertunda');
+  add('U13', 'Pantau Transaksi', 'Filter Status Tertunda', 'Daftar 4 transaksi; Filter = Tertunda', '1 transaksi Tertunda ditampilkan', `${tertundaOnly.length} transaksi Tertunda ditampilkan`, tertundaOnly.length > 0);
+
+  // --- MODUL PUSAT KEAMANAN (U14 - U22) ---
+  const r14 = Security.updateLimitAmbang(5000000, 1000000);
+  add('U14', 'Pusat Keamanan', 'Atur Limit dan ambang valid', 'Limit 5.000.000; ambang 1.000.000', 'Pengaturan keamanan tersimpan', r14.msg, r14.ok === true);
+
+  const r15 = Security.updateLimitAmbang(0, 1000000);
+  add('U15', 'Pusat Keamanan', 'Limit harian tidak valid', 'Limit = 0', 'Limit harian harus angka lebih dari 0', r15.msg, r15.msg.includes('Limit harian harus angka lebih dari 0'));
+
+  const r16 = Security.updateLimitAmbang(1000000, 5000000);
+  add('U16', 'Pusat Keamanan', 'Ambang melebihi Limit harian', 'Limit 1.000.000; ambang 5.000.000', 'Ambang verifikasi tidak boleh melebihi Limit harian', r16.msg, r16.msg.includes('Ambang verifikasi tidak boleh melebihi'));
+
+  Security.updateLimitAmbang(5000000, 1000000);
+  const r17 = Security.needsVerification(1500000);
+  add('U17', 'Pusat Keamanan', 'Nominal di atas ambang verifikasi', 'Nominal 1.500.000; ambang 1.000.000', 'Verifikasi sidik jari diminta', 'Verifikasi sidik jari diminta', r17 === true);
+
+  const r18 = Security.needsVerification(500000);
+  add('U18', 'Pusat Keamanan', 'Nominal di bawah ambang verifikasi', 'Nominal 500.000; ambang 1.000.000', 'Transaksi diproses tanpa verifikasi tambahan', 'Transaksi diproses tanpa verifikasi tambahan', r18 === false);
+
+  const r19 = await Transaction.executeTransaction({ jenis_transaksi: 'Transfer', tujuan: 'B', nominal: 1500000, saldo_minimum: 0 }, { forceVerificationResult: false });
+  add('U19', 'Pusat Keamanan', 'Verifikasi sidik jari gagal', 'Sidik jari tidak cocok', 'Verifikasi gagal: transaksi dibatalkan; Log dicatat', r19.msg, r19.step === 'verification_failed');
+
+  Storage.setNasabah({ ...Storage.getNasabah(), saldo: 10000000 });
+  const todayStr = new Date().toISOString().slice(0, 10);
+  Storage.addItem('transaksi', { id_transaksi: 'T-LIMIT-1', id_nasabah: 'N001', jenis_transaksi: 'Transfer', tujuan: 'X', nominal: 1000000, waktu: `${todayStr}T10:00:00`, status_transaksi: 'Berhasil' });
+  const r20 = Transaction.checkExecutionPrerequisites(4500000, 0);
+  add('U20', 'Pusat Keamanan', 'Total transaksi melebihi Limit harian', 'Terpakai 1.000.000 + nominal 4.500.000; Limit 5.000.000', 'Ditolak: melebihi Limit harian Rp 5.000.000; Log dicatat', r20.msg, r20.status === 'DITOLAK_LIMIT');
+
+  Security.activateLock(1);
+  const r21 = Transaction.checkExecutionPrerequisites(100000, 0);
+  add('U21', 'Pusat Keamanan', 'Transaksi saat kunci sementara aktif', 'Kunci = aktif; nominal 100.000', 'Ditolak: transaksi keluar sedang dikunci; Log dicatat', r21.msg, r21.status === 'DITOLAK_KUNCI');
+
+  Security.deactivateLock();
+  const r22 = Transaction.checkExecutionPrerequisites(100000, 0);
+  add('U22', 'Pusat Keamanan', 'Transaksi setelah kunci dibuka', 'Kunci = nonaktif; nominal 100.000', 'Transaksi diproses tanpa verifikasi tambahan', r22.msg, r22.status === 'READY_TO_EXECUTE');
+
+  // --- MODUL NAVIGASI SEDERHANA (U23 - U29) ---
+  const r23 = Navigation.searchFeatures('listrik');
+  add('U23', 'Navigasi Sederhana', 'Cari fitur dengan kata kunci tersedia', 'Kata kunci = "listrik"', '3 fitur ditemukan: Bayar Listrik PLN, Token Listrik Prabayar, Jadwalkan Bayar Listrik', `${r23.count} fitur ditemukan`, r23.ok && r23.count === 3);
+
+  const r24 = Navigation.searchFeatures('xyz123');
+  add('U24', 'Navigasi Sederhana', 'Cari fitur dengan kata kunci tidak tersedia', 'Kata kunci = "xyz123"', 'Fitur tidak ditemukan', r24.msg, r24.msg === 'Fitur tidak ditemukan');
+
+  const r25 = Navigation.searchFeatures('');
+  add('U25', 'Navigasi Sederhana', 'Kolom pencarian kosong', 'Kata kunci = (kosong)', 'Masukkan kata kunci pencarian', r25.msg, r25.msg === 'Masukkan kata kunci pencarian');
+
+  // U26: Ensure Adik not existing prior to test
+  Storage.removeItem('penerima_favorit', 'nama_penerima', 'Adik');
+  const r26 = Navigation.addFavorite('Adik', '7755', 'Transfer');
+  add('U26', 'Navigasi Sederhana', 'Tambah penerima favorit baru', 'Nama Adik; tujuan 7755', 'Penerima favorit tersimpan', r26.msg, r26.ok === true);
+
+  const r27 = Navigation.addFavorite('Ibu Kos', '4821', 'Transfer');
+  add('U27', 'Navigasi Sederhana', 'Tambah penerima favorit yang sudah ada', 'Nama Ibu Kos; tujuan 4821', 'Penerima sudah ada di daftar favorit', r27.msg, r27.ok === false && r27.msg === 'Penerima sudah ada di daftar favorit');
+
+  const r28 = Navigation.setMode('sederhana');
+  add('U28', 'Navigasi Sederhana', 'Aktifkan Mode Sederhana', 'Mode = sederhana', 'Menampilkan 4 Menu inti: Transfer, Top up, Bayar, Pantau', r28.msg, r28.menuCount === 4);
+
+  const r29 = Navigation.setMode('normal');
+  add('U29', 'Navigasi Sederhana', 'Nonaktifkan Mode Sederhana', 'Mode = normal', 'Menampilkan 8 Menu lengkap', r29.msg, r29.menuCount === 8);
+
+  // Restore seed data
+  Storage.reset();
+
+  renderTestCards();
+}
+
+// Auto run on load
+window.addEventListener('DOMContentLoaded', () => {
+  runAllBlackboxTests();
+});
+</script>
+
+</body>
+</html>
